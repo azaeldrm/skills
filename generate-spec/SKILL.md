@@ -42,7 +42,19 @@ Generate a SPEC.md through interactive conversation. This skill produces **only 
 
 ### Step 2: Ask Questions
 
-Run an interactive requirements conversation. Ask questions in batches of 2-4. Prompt the user in the CLI with choices to answer.
+Run an interactive requirements conversation. Ask questions in batches of 1-4 using the **`AskUserQuestion` tool** so the user can answer via the TUI selection interface. This is faster and clearer than free-text back-and-forth.
+
+**How to use AskUserQuestion:**
+
+- Group related questions into a single `AskUserQuestion` call (up to 4 questions per call).
+- Provide 2-4 concrete options per question. Put the recommended option first with `(Recommended)` in the label.
+- Use short, descriptive `header` values (max 12 chars) like `"Prefetch"`, `"Cache size"`, `"Scope"`.
+- Use `description` on each option to explain trade-offs — this is where rationale lives.
+- Use `preview` on options when showing ASCII wireframes, code snippets, or schema comparisons.
+- Use `multiSelect: true` when choices aren't mutually exclusive (e.g., "Which features to include?").
+- The user always has an implicit "Other" option to type a custom answer — don't add one manually.
+- Between batches, briefly summarize what you learned and explain the next area of questions.
+- Continue asking batches until you can write the full spec without guessing.
 
 **What to cover:**
 
@@ -56,7 +68,7 @@ Run an interactive requirements conversation. Ask questions in batches of 2-4. P
 **Rules:**
 
 - When the user mentions a service (e.g., "I have Kokoro running"), search the web for its actual API documentation. Spec against real endpoints, not assumptions.
-- When there are bounded choices (e.g., "which navigation pattern?"), describe the options concretely and let the user pick.
+- When there are bounded choices (e.g., "which navigation pattern?"), describe the options concretely and let the user pick via TUI options.
 - When the user says "I'm not sure," make a recommendation and explain why.
 - Don't ask questions you can answer by reading the existing codebase.
 - Stop asking when you can write the full spec without guessing.
