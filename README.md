@@ -1,6 +1,6 @@
 # Skills
 
-A collection of reusable Claude Code skills for Spec-Driven Development (SSD) workflows — from planning and spec generation to implementation, bug auditing, and documentation.
+A collection of my reusable Claude Code skills for Spec-Driven Development (SSD) workflows, from planning and spec generation to implementation, bug auditing, and documentation.
 
 ## Skills
 
