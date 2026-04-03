@@ -14,3 +14,4 @@ A collection of my reusable skills for Codex, Opencode, and Claude Code, built a
 | `tasks-bugs` | Audit recent code for bugs and append confirmed findings to `BUGS.md` |
 | `generate-state` | Snapshot the current state of the repository into `docs/STATE.md` |
 | `generate-discovery` | Capture architectural decisions and discoveries into `DISCOVERY.md` |
+| `pr-review` | Run 3 independent PR review passes by default, verify findings against the code, and propose fixes before any edits |

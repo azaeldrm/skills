@@ -1,0 +1,4 @@
+interface:
+  display_name: "PR Review"
+  short_description: "Review a PR with verified findings"
+  default_prompt: "Use $pr-review to review a pull request thoroughly and consolidate the findings."
