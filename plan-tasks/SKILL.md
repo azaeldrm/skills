@@ -1,11 +1,25 @@
 ---
-name: tasks-create
-description: Generate a detailed TASKS.md implementation checklist from SPEC.md with step-by-step tasks, milestones, and reference tables. Use this skill after completing spec-generation to create the actionable task list for implementation.
+name: plan-tasks
+description: Generate a detailed Knowledge Base TASKS.md implementation checklist from the active Knowledge Base SPEC.md with step-by-step tasks, milestones, and reference tables. Use this skill after completing spec-generation to create the actionable task list for implementation.
 ---
 
-Read SPEC.md and generate a TASKS.md implementation checklist from it.
+Read the active Knowledge Base `SPEC.md` and generate a `TASKS.md` implementation checklist next to it.
+
+Determine the active effort folder first:
+
+1. Determine the project name: `basename $(git rev-parse --show-toplevel)`
+2. Determine the current version from the branch name.
+   - If the branch contains a semantic version token with an optional leading `v`, use that version without the leading `v`.
+   - Otherwise, ask the user which version folder to use.
+3. Read:
+   `/srv/homelab/docker/syncthing/data/obsidian-vault/Knowledge Base/<project-name>/<version>/SPEC.md`
+4. Write:
+   `/srv/homelab/docker/syncthing/data/obsidian-vault/Knowledge Base/<project-name>/<version>/TASKS.md`
+
+Do not read or write root-level `SPEC.md` or `TASKS.md` unless the user explicitly asks for temporary working copies.
 
 Before writing, read these sections of the spec if they exist:
+- **Current Behavior Analysis** — what's broken today, why, and how the new design fixes it (only present for fix/replace efforts)
 - **Acceptance Criteria** — what must be provably true when each slice is done
 - **Test Scenarios** — the behavioral tests to write, grouped by unit/integration/regression
 - **Risks / Regression Concerns** — what could break; prioritize regression coverage here
@@ -58,8 +72,8 @@ For simple tasks where the implementation is self-evident and the test is trivia
 - Include a "Reference: New Files Checklist" table and a "Reference: Modified Files" table at the end
 - Include a "Key Technical Notes" section for gotchas and architectural decisions
 
-Before writing, check if there is existing completed work in docs/ subdirectories (e.g. docs/0.1.0/, docs/0.2.0/) and note it at the top of the file so the reader knows what's already done.
+Before writing, check if there is existing completed work in Knowledge Base version folders for the project (e.g. `Knowledge Base/<project-name>/0.1.0/`, `Knowledge Base/<project-name>/0.2.0/`) and note it at the top of the file so the reader knows what's already done.
 
-Write the result to TASKS.md in the current working directory.
+Write the result to `TASKS.md` in the same Knowledge Base effort folder as the active `SPEC.md`.
 
-**Branching:** After generating TASKS.md, create a new git branch named after the overall effort in kebab-case (e.g. `feature/v0.4.0-quality-of-life` or `feature/multi-user-support`). Do not include step numbers in branch names — branches represent deployable efforts, not individual steps. The `/tasks-start` skill will implement on this branch.
+**Branching:** After generating `TASKS.md`, create a new git branch named after the overall effort in kebab-case (e.g. `feature/v0.4.0-quality-of-life` or `feature/multi-user-support`). Do not include step numbers in branch names — branches represent deployable efforts, not individual steps. The `/step-task` skill will implement on this branch using the Knowledge Base `TASKS.md`.
