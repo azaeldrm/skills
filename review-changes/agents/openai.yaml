@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review Changes"
+  short_description: "Review code changes with verified findings"
+  default_prompt: "Use $review-changes to review the current branch diff thoroughly and consolidate the findings."
