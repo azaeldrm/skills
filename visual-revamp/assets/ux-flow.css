@@ -80,13 +80,18 @@
 .uxf-steps li.on::before { background: var(--uxf-accent); }
 .uxf-meta { font-size: 11px; color: var(--uxf-muted); }
 
+.uxf-steps li.on.uxf-ghost { display: none; }
+
 /* narrow: steps go above the frames and shrink to the current one, leaving the frames the room */
 @container (max-width: 760px) {
   .uxf-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); gap: 10px; align-items: stretch; }
   .uxf-side { order: -1; gap: 8px; }
   .uxf-title { font-size: 18px; }
   .uxf-steps li:not(.on), .uxf-meta { display: none; }
-  /* a fixed two-line slot, so the frames don't jump before the first caption or when one wraps */
-  .uxf-steps { height: calc(2 * 1.4em + 16px); font-size: 13px; }
-  .uxf-steps li.on { height: 100%; box-sizing: border-box; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  /* a fixed two-line slot, so the frames don't jump before the first caption or when one wraps. Sized
+     from the step's own line height (2lh) with padding and any border outside it, so page overrides of
+     the step's font, padding or border still fit. Before the first caption, a hidden placeholder step
+     (styled as the current step, so it matches exactly) holds the slot. */
+  .uxf-steps li.on { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; box-sizing: content-box; height: 2lh; }
+  .uxf-steps:not(:has(li.on:not(.uxf-ghost))) li.uxf-ghost { display: -webkit-box; visibility: hidden; }
 }
