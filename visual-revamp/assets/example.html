@@ -17,6 +17,7 @@
   .themes { margin-left: auto; display: flex; gap: 6px; }
   .themes button { font: inherit; font-size: 12px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--text); cursor: pointer; }
   .themes button.on { background: var(--text); color: var(--bg); }
+  @media (max-width: 640px) { .brand { display: none; } .themes { gap: 2px; } .themes button { padding: 6px 8px; } }
 
   /* overview */
   .lede { max-width: 640px; font-size: 18px; line-height: 1.55; color: var(--text-muted); margin: 0; }
@@ -117,7 +118,7 @@
   </section>
 
   <!-- Design system: data-split spreads the blocks over as many pages as the window needs. -->
-  <section class="g-page" data-section="Design system" data-name="Foundations" data-split>
+  <section class="g-page" data-section="Design system" data-short="System" data-name="Foundations" data-split>
     <h2>Foundations</h2>
     <div class="g-block"><h3>Color</h3><div class="swatches">
       <div class="swatch"><i style="background:var(--bg)"></i><span>bg</span></div>
