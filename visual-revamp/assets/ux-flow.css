@@ -8,21 +8,37 @@
   --uxf-accent: var(--accent, #111);
   --uxf-font: var(--font-ui, system-ui, sans-serif);
   --uxf-ease: var(--ease, cubic-bezier(.2, .7, .2, 1));
-  display: grid;
-  grid-template-columns: max-content 300px;
-  gap: 40px;
-  align-items: center;
+  container-type: inline-size;
+  height: var(--uxf-h, min(880px, 92vh));
   font-family: var(--uxf-font);
   color: var(--uxf-text);
 }
+.uxf-body { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 280px; gap: 32px; align-items: center; }
 
-/* frames */
-.uxf-frame { position: relative; flex: none; }
-.uxf-phone { width: 390px; height: 844px; border-radius: 48px; box-shadow: 0 0 0 10px #111, 0 0 0 11px #333, 0 30px 60px -20px rgba(0, 0, 0, .45); }
-.uxf-tablet { width: 1024px; height: 720px; border-radius: 28px; box-shadow: 0 0 0 14px #111, 0 0 0 15px #333, 0 30px 60px -20px rgba(0, 0, 0, .45); }
+/* stage: the frames, scaled by ux-flow.js to fit; room around them for the bezel shadows */
+.uxf-stage { position: relative; height: 100%; min-width: 0; min-height: 0; box-sizing: border-box; padding: 16px; display: flex; gap: 28px; align-items: center; justify-content: center; }
+
+/* narrow: one device at a time; the hidden ones keep their layout (so steps still land) but take no room */
+.uxf-device.uxf-off { position: absolute; left: 0; top: 0; visibility: hidden; pointer-events: none; }
+.uxf-single { overflow: hidden; }
+.uxf-switch { display: none; position: absolute; top: 50%; z-index: 60; width: 40px; height: 40px; margin-top: -20px; border-radius: 50%;
+  border: 1px solid var(--uxf-line); background: var(--uxf-bg); color: var(--uxf-text); font: 400 22px/1 var(--uxf-font); cursor: pointer; }
+.uxf-single .uxf-switch { display: block; }
+.uxf-prev { left: 0; } .uxf-next { right: 0; }
+.uxf-device { position: relative; flex: none; display: flex; flex-direction: column; align-items: center; }
+.uxf-device .uxf-frame { transform-origin: 0 0; }
+.uxf-device { height: calc(var(--uxf-fh, 0px) + var(--uxf-lab, 0px)); }
+.uxf-device:has(.uxf-label) { --uxf-lab: 28px; }
+.uxf-device > .uxf-frame { position: absolute; left: 0; top: 0; }
+.uxf-label { position: absolute; left: 0; right: 0; bottom: 0; text-align: center; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--uxf-muted); }
+
+/* frames (native size; scaled as a whole) */
+.uxf-frame { box-sizing: content-box; }
+.uxf-phone { width: 390px; height: 844px; border-radius: 48px; box-shadow: 0 0 0 10px #111, 0 0 0 11px #444, 0 30px 60px -20px rgba(0, 0, 0, .45); }
+.uxf-tablet { width: 1024px; height: 720px; border-radius: 28px; box-shadow: 0 0 0 14px #111, 0 0 0 15px #444, 0 30px 60px -20px rgba(0, 0, 0, .45); }
 .uxf-desktop { width: 1280px; height: 800px; border-radius: 10px; border: 1px solid var(--uxf-line); padding-top: 30px; background: var(--uxf-surface); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .35); }
 .uxf-desktop::before { content: ""; position: absolute; top: 11px; left: 14px; width: 9px; height: 9px; border-radius: 50%; background: var(--uxf-line); box-shadow: 15px 0 var(--uxf-line), 30px 0 var(--uxf-line); }
-.uxf-none { width: var(--uxf-w, 800px); height: var(--uxf-h, 600px); }
+.uxf-none { width: var(--uxf-w, 800px); height: var(--uxf-hh, 600px); }
 .uxf-screen { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; background: var(--uxf-bg); color: var(--uxf-text); }
 .uxf-desktop .uxf-screen { border-radius: 0 0 9px 9px; }
 
@@ -50,8 +66,8 @@
 @media (prefers-reduced-motion: reduce) { .uxf-screen *, .uxf-screen { transition: none !important; animation: none !important; } .uxf-pointer { display: none; } }
 
 /* side panel */
-.uxf-side { display: flex; flex-direction: column; gap: 12px; }
-.uxf-title { margin: 0; font-size: 28px; font-weight: 400; letter-spacing: -.01em; }
+.uxf-side { display: flex; flex-direction: column; gap: 12px; min-width: 0; max-height: 100%; overflow: hidden; }
+.uxf-title { margin: 0; font-size: 26px; font-weight: 400; letter-spacing: -.01em; }
 .uxf-ctl { display: flex; align-items: center; gap: 8px; }
 .uxf-ctl button { font: 500 12px/1 var(--uxf-font); padding: 7px 12px; border-radius: 999px; border: 1px solid var(--uxf-line); background: transparent; color: var(--uxf-text); cursor: pointer; }
 .uxf-progress { flex: 1; height: 3px; border-radius: 3px; background: var(--uxf-line); overflow: hidden; }
@@ -64,5 +80,10 @@
 .uxf-steps li.on::before { background: var(--uxf-accent); }
 .uxf-meta { font-size: 11px; color: var(--uxf-muted); }
 
-/* narrow gallery columns: stack the steps under the frame */
-.uxf.stack { grid-template-columns: max-content; }
+/* narrow: steps go above the frames and shrink to the current one, leaving the frames the room */
+@container (max-width: 760px) {
+  .uxf-body { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); gap: 10px; align-items: stretch; }
+  .uxf-side { order: -1; gap: 8px; }
+  .uxf-title { font-size: 18px; }
+  .uxf-steps li:not(.on), .uxf-meta { display: none; }
+}
