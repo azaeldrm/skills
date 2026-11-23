@@ -17,6 +17,8 @@
 //   .g-nav, the arrow / PageUp / PageDown / Home / End keys, or a sideways swipe.
 // - A data-split page spreads its .g-block children over as many pages as the window needs (its first
 //   heading repeats with "1 / 2"); redone on resize. A block taller than a page on its own is shrunk to fit.
+// - data-short on a section's first page gives its header link a short label for narrow screens
+//   (data-section="Design system" data-short="System").
 // - The URL hash holds the current page, so a reload or a shared link opens on it.
 // - Header, page and pager content share one centred column (--g-max, default 1200px).
 // - Flows on hidden pages are paused; a flow starts from step 1 when its page is shown (ux-flow.js).
@@ -64,10 +66,13 @@
           body = fresh();
           body.appendChild(c);
         }
+        // Too tall on its own: shrink it. The block reflows once zoomed, so re-measure a few times.
         const pg2 = body.parentElement;
-        if (pg2.scrollHeight > pg2.clientHeight + 1) {
+        for (let k = 0; k < 4 && pg2.scrollHeight > pg2.clientHeight + 1; k++) {
           const over = pg2.scrollHeight - pg2.clientHeight;
-          c.style.zoom = Math.max(0.3, (c.offsetHeight - over) / c.offsetHeight);
+          const h = c.getBoundingClientRect().height;
+          const z = parseFloat(c.style.zoom) || 1;
+          c.style.zoom = Math.max(0.3, z * (h - over - 2) / h);
         }
       });
       const n = s.made.length;
@@ -94,7 +99,11 @@
       nav.innerHTML = "";
       [...new Set(pages.map((p) => p.dataset.section))].forEach((sec) => {
         const b = document.createElement("button");
-        b.type = "button"; b.textContent = sec;
+        b.type = "button";
+        const short = pages.find((p) => p.dataset.section === sec && p.dataset.short)?.dataset.short;
+        const long = document.createElement("span"); long.className = "g-long"; long.textContent = sec;
+        b.appendChild(long);
+        if (short) { const sh = document.createElement("span"); sh.className = "g-short"; sh.textContent = short; b.appendChild(sh); b.title = sec; }
         b.classList.toggle("on", pages[cur]?.dataset.section === sec);
         b.addEventListener("click", () => go(pages.findIndex((p) => p.dataset.section === sec)));
         nav.appendChild(b);

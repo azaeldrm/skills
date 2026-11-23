@@ -11,6 +11,7 @@ body.g { --g-max: 1200px; --g-pad: 32px; margin: 0; height: 100vh; height: 100dv
 .g-pager { border-bottom: 0; border-top: 1px solid var(--line, #ddd); }
 .g-nav { display: flex; gap: 4px; }
 .g-nav button, .g-pager button { white-space: nowrap; font: inherit; font-size: 13px; color: var(--text, #111); background: none; border: 1px solid transparent; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.g-nav .g-short { display: none; }
 .g-nav button.on { border-color: var(--line, #ddd); background: var(--surface, #f2f2f2); }
 .g-pager .g-prev, .g-pager .g-next { border-color: var(--line, #ddd); width: 40px; height: 40px; padding: 0; font-size: 16px; }
 .g-pager button:disabled { opacity: .35; cursor: default; }
@@ -37,4 +38,6 @@ body.g { --g-max: 1200px; --g-pad: 32px; margin: 0; height: 100vh; height: 100dv
   .g-page > h2 { font-size: 22px; }
   .g-where { display: none; }
   .g-bar > .g-col { gap: 10px; }
+  .g-nav button:has(.g-short) .g-long { display: none; }
+  .g-nav .g-short { display: inline; }
 }
