@@ -19,6 +19,7 @@
 //   heading repeats with "1 / 2"); redone on resize. A block taller than a page on its own is shrunk to fit.
 // - data-short on a section's first page gives its header link a short label for narrow screens
 //   (data-section="Design system" data-short="System").
+// - Pages are re-split on resize and whenever a web font finishes loading, keeping the current page.
 // - The URL hash holds the current page, so a reload or a shared link opens on it.
 // - Header, page and pager content share one centred column (--g-max, default 1200px).
 // - Flows on hidden pages are paused; a flow starts from step 1 when its page is shown (ux-flow.js).
@@ -168,5 +169,7 @@
 
   const start = () => layout();
   document.fonts && document.fonts.ready ? document.fonts.ready.then(start) : start();
+  // fonts.ready can resolve before fonts used only on later pages arrive; re-split when any finish loading.
+  if (document.fonts) document.fonts.addEventListener("loadingdone", () => { clearTimeout(t); t = setTimeout(layout, 50); });
   window.Gallery = { go, layout, get pages() { return pages; }, get current() { return cur; } };
 })();

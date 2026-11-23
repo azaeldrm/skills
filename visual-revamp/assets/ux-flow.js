@@ -19,8 +19,12 @@
 //
 // Frames: phone, tablet, desktop, none. Frames scale down to fit the flow's box (the box's height is
 // --uxf-h, or 100% inside a fixed-height parent such as a gallery page). Wide: all devices side by side.
-// Narrow (flow under 760px): one device at a time, phone first, with buttons on its left and right to
-// switch; the others keep playing in sync, so switching lands on the same moment.
+// Narrow (flow under 760px): only the phone, since a scaled-down web frame is unreadable there. Set
+// data-narrow="switch" on the flow to show one device at a time with buttons to switch instead (the
+// others keep playing in sync, so switching lands on the same moment).
+//
+// Tabs or menus where the nav stays put and only the content changes: use one view per device and swap
+// the content with cls steps (toggle an "on" class on panes), not separate views, which slide.
 // Or from script: UXFlow.mount(el, { title, frame, len, steps }).
 //
 // A step is [ms, op, ...args], run in time order. Ops:
@@ -184,10 +188,16 @@
       const H = this.stage.clientHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
       if (W <= 0 || H <= 0) return;
       const single = this.devices.length > 1 && this.el.clientWidth < 760;
+      const switching = single && this.el.dataset.narrow === "switch";
+      if (single && !switching) {
+        const ph = this.devices.findIndex((d) => d.frame.classList.contains("uxf-phone"));
+        if (ph >= 0) this.shown = ph;
+      }
       this.stage.classList.toggle("uxf-single", single);
+      this.stage.classList.toggle("uxf-switching", switching);
       const on = single ? [this.devices[this.shown]] : this.devices;
       this.devices.forEach((d) => d.box.classList.toggle("uxf-off", !on.includes(d)));
-      const room = single ? 2 * 44 : 0; // the switch buttons sit either side
+      const room = switching ? 2 * 44 : 0; // the switch buttons sit either side
       const gap = parseFloat(cs.columnGap) || 24;
       const dims = on.map((d) => [d.frame.offsetWidth, d.frame.offsetHeight, d.box.querySelector(".uxf-label") ? 28 : 0]);
       const n = dims.length, lab = Math.max(...dims.map((x) => x[2]));
