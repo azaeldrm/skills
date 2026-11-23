@@ -2,70 +2,108 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Example gallery — UX and Design system</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Example — UX and Design system</title>
+<link rel="stylesheet" href="gallery.css">
 <link rel="stylesheet" href="ux-flow.css">
 <style>
   /* The app's design tokens. A real run replaces these with the direction's own. */
-  :root { --bg: #fbfaf7; --text: #1b1b1b; --text-muted: #77736c; --surface: #efece6; --line: #dcd7cd; --accent: #2f5d50;
+  :root { --bg: #fbfaf7; --text: #1b1b1b; --text-muted: #6f6b64; --surface: #efece6; --line: #dcd7cd; --accent: #2f5d50;
           --font-ui: "Inter", system-ui, sans-serif; --ease: cubic-bezier(.2, .7, .2, 1); }
-  [data-theme="dark"] { --bg: #141413; --text: #ecebe7; --text-muted: #9b978f; --surface: #22211f; --line: #34322f; --accent: #7fb3a2; }
+  [data-theme="dark"] { --bg: #141413; --text: #ecebe7; --text-muted: #a29e96; --surface: #22211f; --line: #3a3835; --accent: #7fb3a2; }
   [data-theme="eink"] { --bg: #fff; --text: #000; --text-muted: #333; --surface: #fff; --line: #000; --accent: #000; }
-  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-ui); }
-  header { position: sticky; top: 0; z-index: 10; display: flex; gap: 24px; align-items: center; padding: 14px 40px; background: var(--bg); border-bottom: 1px solid var(--line); }
-  header nav a { color: var(--text-muted); text-decoration: none; margin-right: 16px; }
-  header .themes { margin-left: auto; display: flex; gap: 6px; }
-  header .themes button { font: inherit; font-size: 12px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--text); cursor: pointer; }
-  header .themes button.on { background: var(--text); color: var(--bg); }
-  section { padding: 48px 40px; border-bottom: 1px solid var(--line); }
-  section > h2 { margin: 0 0 28px; font-weight: 400; font-size: 34px; }
-  .row { display: flex; flex-wrap: wrap; gap: 64px; }
 
-  /* the example app's own components, used by the flow below */
+  .brand { font-weight: 600; }
+  .themes { margin-left: auto; display: flex; gap: 6px; }
+  .themes button { font: inherit; font-size: 12px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--text); cursor: pointer; }
+  .themes button.on { background: var(--text); color: var(--bg); }
+
+  /* overview */
+  .lede { max-width: 640px; font-size: 18px; line-height: 1.55; color: var(--text-muted); margin: 0; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .card { padding: 20px; border-radius: 16px; background: var(--surface); cursor: pointer; }
+  .card b { display: block; font-size: 18px; margin-bottom: 6px; }
+
+  /* the example app's own components, used by the flows */
   .bar { display: flex; align-items: center; justify-content: space-between; padding: 64px 24px 14px; font-size: 24px; font-weight: 600; }
+  .uxf-desktop .bar { padding: 28px 40px 18px; }
   .list { padding: 0 24px; display: flex; flex-direction: column; gap: 10px; }
+  .uxf-desktop .list { padding: 0 40px; display: grid; grid-template-columns: repeat(3, 1fr); }
   .item { padding: 14px 16px; border-radius: 14px; background: var(--surface); font-size: 15px; }
   .item small { display: block; color: var(--text-muted); margin-top: 4px; font-size: 12px; }
   .item.new { display: none; } .item.new.on { display: block; }
   .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px; border-radius: 999px; font-size: 14px; font-weight: 500; background: var(--accent); color: var(--bg); }
   .btn.ghost { background: none; color: var(--text); border: 1px solid var(--line); }
   .field { margin: 0 24px; min-height: 140px; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line); font-size: 16px; line-height: 1.5; }
+  .uxf-desktop .field { margin: 0 40px; min-height: 220px; }
   .field .caret { display: inline-block; width: 1.5px; height: 18px; background: var(--text); vertical-align: -3px; }
   .actions { display: flex; justify-content: flex-end; gap: 8px; padding: 16px 24px; }
+  .uxf-desktop .actions { padding: 16px 40px; }
   .toast { position: absolute; left: 50%; bottom: 40px; transform: translate(-50%, 20px); opacity: 0; padding: 10px 16px; border-radius: 12px; background: var(--text); color: var(--bg); font-size: 14px; transition: all .3s var(--ease); }
   .toast.on { opacity: 1; transform: translate(-50%, 0); }
   [data-theme="eink"] .item { border: 2px solid #000; }
 
-  /* design system swatches */
-  .swatch { width: 140px; } .swatch i { display: block; height: 72px; border-radius: 12px; border: 1px solid var(--line); margin-bottom: 8px; }
+  /* design system blocks */
+  .g-block h3 { margin: 0 0 12px; font-size: 13px; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; color: var(--text-muted); }
+  .swatches { display: flex; gap: 16px; flex-wrap: wrap; }
+  .swatch { width: 120px; } .swatch i { display: block; height: 64px; border-radius: 12px; border: 1px solid var(--line); margin-bottom: 6px; }
   .swatch span { font-size: 12px; color: var(--text-muted); }
+  .type p { margin: 0 0 8px; }
+  .comps { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
 </style>
 </head>
-<body data-theme="light">
-<header>
-  <strong>Example</strong>
-  <nav><a href="#ux">UX</a><a href="#design-system">Design system</a></nav>
-  <div class="themes">
-    <button data-set="light" class="on">Light</button><button data-set="dark">Dark</button><button data-set="eink">E-ink</button>
-  </div>
-</header>
+<body class="g" data-theme="light">
+<header class="g-bar"><div class="g-col">
+  <span class="brand">Example</span>
+  <nav class="g-nav"></nav>
+  <div class="themes"><button data-set="light" class="on">Light</button><button data-set="dark">Dark</button><button data-set="eink">E-ink</button></div>
+</div></header>
 
-<section id="ux">
-  <h2>UX</h2>
-  <div class="row">
-    <div class="uxf" data-title="Write a note" data-frame="phone">
-      <div class="uxf-view" data-v="list">
-        <div class="bar">Notes <span class="btn" data-k="new">New</span></div>
-        <div class="list">
-          <div class="item new">Call the framer about the print<small>Just now</small></div>
-          <div class="item">Groceries: oats, lemons, coffee<small>Yesterday</small></div>
-          <div class="item">Ideas for the weekend<small>Mon</small></div>
+<main class="g-pages">
+  <!-- Overview: the direction in a sentence or two, and the way into each section. -->
+  <section class="g-page" data-section="Overview" data-name="Direction">
+    <h2>Quiet notes</h2>
+    <p class="lede">Warm paper, one deep green for anything you can act on, nothing that competes with what you are writing.</p>
+    <div class="cards">
+      <div class="card" data-go="UX"><b>UX</b>Each flow plays on web and phone side by side.</div>
+      <div class="card" data-go="Design system"><b>Design system</b>Color, type and components.</div>
+    </div>
+  </section>
+
+  <!-- UX: one page per flow. The same steps drive both devices; each device has views built for its size. -->
+  <section class="g-page" data-section="UX" data-name="Write a note">
+    <div class="uxf" data-title="Write a note">
+      <div class="uxf-device" data-frame="desktop" data-label="Web">
+        <div class="uxf-view" data-v="list">
+          <div class="bar">Notes <span class="btn" data-k="new">New note</span></div>
+          <div class="list">
+            <div class="item new">Call the framer about the print<small>Just now</small></div>
+            <div class="item">Groceries: oats, lemons, coffee<small>Yesterday</small></div>
+            <div class="item">Ideas for the weekend<small>Mon</small></div>
+          </div>
+          <div class="toast">Note saved</div>
         </div>
-        <div class="toast">Note saved</div>
+        <div class="uxf-view" data-v="edit">
+          <div class="bar">New note</div>
+          <div class="field"><span class="note"></span><span class="caret"></span></div>
+          <div class="actions"><span class="btn ghost">Cancel</span><span class="btn" data-k="save">Save</span></div>
+        </div>
       </div>
-      <div class="uxf-view" data-v="edit">
-        <div class="bar">New note</div>
-        <div class="field"><span class="note"></span><span class="caret"></span></div>
-        <div class="actions"><span class="btn ghost">Cancel</span><span class="btn" data-k="save">Save</span></div>
+      <div class="uxf-device" data-frame="phone" data-label="Phone">
+        <div class="uxf-view" data-v="list">
+          <div class="bar">Notes <span class="btn" data-k="new">New</span></div>
+          <div class="list">
+            <div class="item new">Call the framer about the print<small>Just now</small></div>
+            <div class="item">Groceries: oats, lemons, coffee<small>Yesterday</small></div>
+            <div class="item">Ideas for the weekend<small>Mon</small></div>
+          </div>
+          <div class="toast">Note saved</div>
+        </div>
+        <div class="uxf-view" data-v="edit">
+          <div class="bar">New note</div>
+          <div class="field"><span class="note"></span><span class="caret"></span></div>
+          <div class="actions"><span class="btn ghost">Cancel</span><span class="btn" data-k="save">Save</span></div>
+        </div>
       </div>
       <script type="application/json">[
         [0, "view", "list"],
@@ -76,20 +114,32 @@
         [6000, "cap", "The new note sits on top"], [7200, "cls", ".toast", "on", false]
       ]</script>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="design-system">
-  <h2>Design system</h2>
-  <div class="row">
-    <div class="swatch"><i style="background:var(--bg)"></i><span>bg</span></div>
-    <div class="swatch"><i style="background:var(--surface)"></i><span>surface</span></div>
-    <div class="swatch"><i style="background:var(--text)"></i><span>text</span></div>
-    <div class="swatch"><i style="background:var(--accent)"></i><span>accent</span></div>
-  </div>
-</section>
+  <!-- Design system: data-split spreads the blocks over as many pages as the window needs. -->
+  <section class="g-page" data-section="Design system" data-name="Foundations" data-split>
+    <h2>Foundations</h2>
+    <div class="g-block"><h3>Color</h3><div class="swatches">
+      <div class="swatch"><i style="background:var(--bg)"></i><span>bg</span></div>
+      <div class="swatch"><i style="background:var(--surface)"></i><span>surface</span></div>
+      <div class="swatch"><i style="background:var(--line)"></i><span>line</span></div>
+      <div class="swatch"><i style="background:var(--text)"></i><span>text</span></div>
+      <div class="swatch"><i style="background:var(--accent)"></i><span>accent</span></div>
+    </div></div>
+    <div class="g-block type"><h3>Type</h3>
+      <p style="font-size:34px">Display 34</p><p style="font-size:24px;font-weight:600">Title 24</p><p style="font-size:16px">Body 16, for anything you read.</p><p style="font-size:12px;color:var(--text-muted)">Caption 12</p>
+    </div>
+    <div class="g-block"><h3>Components</h3><div class="comps">
+      <span class="btn">Primary</span><span class="btn ghost">Secondary</span>
+      <div class="item" style="width:260px">A list item<small>Its detail line</small></div>
+    </div></div>
+  </section>
+</main>
+
+<footer class="g-bar g-pager"><div class="g-col"></div></footer>
 
 <script src="ux-flow.js"></script>
+<script src="gallery.js"></script>
 <script>
   // Theme toggle. E-ink has no motion, so flows play as instant cuts there.
   document.querySelectorAll("[data-set]").forEach((b) => b.addEventListener("click", () => {
@@ -98,6 +148,9 @@
     document.querySelectorAll("[data-set]").forEach((x) => x.classList.toggle("on", x === b));
     UXFlow.refresh();
   }));
+  // Overview cards jump to their section.
+  document.querySelectorAll("[data-go]").forEach((c) => c.addEventListener("click", () =>
+    Gallery.go(Gallery.pages.findIndex((p) => p.dataset.section === c.dataset.go))));
 </script>
 </body>
 </html>

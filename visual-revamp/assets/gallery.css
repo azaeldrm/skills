@@ -1,0 +1,40 @@
+/* Gallery shell styles. Colors come from the page's tokens (--bg, --text, --text-muted, --surface, --line, --accent). */
+body.g { --g-max: 1200px; --g-pad: 32px; margin: 0; height: 100vh; height: 100dvh; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; overflow: hidden;
+  background: var(--bg, #fff); color: var(--text, #111); font-family: var(--font-ui, system-ui, sans-serif); }
+.g-col { box-sizing: border-box; width: 100%; max-width: calc(var(--g-max) + 2 * var(--g-pad)); margin: 0 auto; padding: 0 var(--g-pad); }
+
+/* bars: backgrounds run edge to edge, contents sit in the column */
+.g-bar { border-bottom: 1px solid var(--line, #ddd); }
+.g-bar > .g-col { display: flex; align-items: center; gap: 20px; min-height: 56px; overflow-x: auto; scrollbar-width: none; }
+.g-bar > .g-col > * { flex: none; }
+.g-pager .g-mid { flex: 1; }
+.g-pager { border-bottom: 0; border-top: 1px solid var(--line, #ddd); }
+.g-nav { display: flex; gap: 4px; }
+.g-nav button, .g-pager button { white-space: nowrap; font: inherit; font-size: 13px; color: var(--text, #111); background: none; border: 1px solid transparent; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
+.g-nav button.on { border-color: var(--line, #ddd); background: var(--surface, #f2f2f2); }
+.g-pager .g-prev, .g-pager .g-next { border-color: var(--line, #ddd); width: 40px; height: 40px; padding: 0; font-size: 16px; }
+.g-pager button:disabled { opacity: .35; cursor: default; }
+.g-mid { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; min-width: 0; }
+.g-where { font-size: 12px; color: var(--text-muted, #777); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+.g-dots { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; justify-content: center; }
+.g-pager .g-dot { width: 8px; height: 8px; padding: 0; border-radius: 50%; background: var(--line, #ddd); border: 0; }
+.g-pager .g-dot.on { background: var(--accent, #111); transform: scale(1.3); }
+.g-sep { width: 10px; }
+
+/* pages: exactly one window tall, in the column */
+.g-pages { position: relative; min-height: 0; overflow: hidden; }
+.g-page { display: none; box-sizing: border-box; height: 100%; max-width: calc(var(--g-max) + 2 * var(--g-pad)); margin: 0 auto; padding: 28px var(--g-pad); overflow: hidden; flex-direction: column; gap: 20px; }
+.g-page.on { display: flex; }
+.g-page.g-measure { position: absolute; inset: 0; visibility: hidden; }
+.g-page > h2 { margin: 0; font-weight: 400; font-size: 30px; display: flex; align-items: baseline; gap: 12px; }
+.g-count { font-size: 13px; color: var(--text-muted, #777); }
+.g-flow { display: flex; flex-wrap: wrap; gap: 24px; align-content: flex-start; }
+.g-page > .uxf { flex: 1; min-height: 0; height: auto; }
+
+@media (max-width: 640px) {
+  body.g { --g-pad: 16px; }
+  .g-page { padding: 16px var(--g-pad); gap: 12px; }
+  .g-page > h2 { font-size: 22px; }
+  .g-where { display: none; }
+  .g-bar > .g-col { gap: 10px; }
+}

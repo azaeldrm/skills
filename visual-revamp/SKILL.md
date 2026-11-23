@@ -41,17 +41,27 @@ theme the product supports (for example light, dark, e-ink or high contrast). Us
 user's images as wallpapers or backgrounds where they work, keeping text contrast intact
 over them.
 
-Build one page with two sections:
+Build one page with two sections, after a short overview of the direction:
 
 - **UX:** the app's screens and flows, animated. Each flow plays from one state to the
   next the way the real app would, so the user sees it behave rather than reading a
-  description of it. Build them with the bundled player, not a new animation system:
-  copy `assets/ux-flow.js` and `assets/ux-flow.css` next to the page and write each
-  flow as its views plus a steps script. The usage and step ops are at the top of
-  `ux-flow.js`, and `assets/example.html` is a working page with both sections to
-  start from.
+  description of it. Show each flow on web and phone side by side, playing in sync (on
+  a narrow screen, one at a time with buttons to switch).
 - **Design system:** the product's aesthetics: color tokens, typography, components,
   icons and imagery.
+
+The page is a deck of screens that each fit the window: no vertical scrolling. The user
+moves between screens with buttons, keys or swipe, one flow per screen, and content
+that doesn't fit spills onto another screen. Keep it in a centred column.
+
+Don't build this from scratch. Start from `assets/example.html` and copy the bundled
+files next to the page, or inline them for a single-file page:
+- `gallery.js` / `gallery.css`: the deck (paging, section links, pager, splitting,
+  centred column).
+- `ux-flow.js` / `ux-flow.css`: the flow player. Each flow is its views per device plus
+  one steps script; frames scale to fit, and a flow starts from step 1 when shown.
+
+Their usage is documented at the top of each `.js` file.
 
 Host the page at a URL the user can open from another machine. Check your own output
 and fix problems before showing it.
