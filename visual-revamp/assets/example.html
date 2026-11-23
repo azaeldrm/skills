@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Example gallery — UX and Design system</title>
+<link rel="stylesheet" href="ux-flow.css">
+<style>
+  /* The app's design tokens. A real run replaces these with the direction's own. */
+  :root { --bg: #fbfaf7; --text: #1b1b1b; --text-muted: #77736c; --surface: #efece6; --line: #dcd7cd; --accent: #2f5d50;
+          --font-ui: "Inter", system-ui, sans-serif; --ease: cubic-bezier(.2, .7, .2, 1); }
+  [data-theme="dark"] { --bg: #141413; --text: #ecebe7; --text-muted: #9b978f; --surface: #22211f; --line: #34322f; --accent: #7fb3a2; }
+  [data-theme="eink"] { --bg: #fff; --text: #000; --text-muted: #333; --surface: #fff; --line: #000; --accent: #000; }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--font-ui); }
+  header { position: sticky; top: 0; z-index: 10; display: flex; gap: 24px; align-items: center; padding: 14px 40px; background: var(--bg); border-bottom: 1px solid var(--line); }
+  header nav a { color: var(--text-muted); text-decoration: none; margin-right: 16px; }
+  header .themes { margin-left: auto; display: flex; gap: 6px; }
+  header .themes button { font: inherit; font-size: 12px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: none; color: var(--text); cursor: pointer; }
+  header .themes button.on { background: var(--text); color: var(--bg); }
+  section { padding: 48px 40px; border-bottom: 1px solid var(--line); }
+  section > h2 { margin: 0 0 28px; font-weight: 400; font-size: 34px; }
+  .row { display: flex; flex-wrap: wrap; gap: 64px; }
+
+  /* the example app's own components, used by the flow below */
+  .bar { display: flex; align-items: center; justify-content: space-between; padding: 64px 24px 14px; font-size: 24px; font-weight: 600; }
+  .list { padding: 0 24px; display: flex; flex-direction: column; gap: 10px; }
+  .item { padding: 14px 16px; border-radius: 14px; background: var(--surface); font-size: 15px; }
+  .item small { display: block; color: var(--text-muted); margin-top: 4px; font-size: 12px; }
+  .item.new { display: none; } .item.new.on { display: block; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 18px; border-radius: 999px; font-size: 14px; font-weight: 500; background: var(--accent); color: var(--bg); }
+  .btn.ghost { background: none; color: var(--text); border: 1px solid var(--line); }
+  .field { margin: 0 24px; min-height: 140px; padding: 14px 16px; border-radius: 14px; border: 1px solid var(--line); font-size: 16px; line-height: 1.5; }
+  .field .caret { display: inline-block; width: 1.5px; height: 18px; background: var(--text); vertical-align: -3px; }
+  .actions { display: flex; justify-content: flex-end; gap: 8px; padding: 16px 24px; }
+  .toast { position: absolute; left: 50%; bottom: 40px; transform: translate(-50%, 20px); opacity: 0; padding: 10px 16px; border-radius: 12px; background: var(--text); color: var(--bg); font-size: 14px; transition: all .3s var(--ease); }
+  .toast.on { opacity: 1; transform: translate(-50%, 0); }
+  [data-theme="eink"] .item { border: 2px solid #000; }
+
+  /* design system swatches */
+  .swatch { width: 140px; } .swatch i { display: block; height: 72px; border-radius: 12px; border: 1px solid var(--line); margin-bottom: 8px; }
+  .swatch span { font-size: 12px; color: var(--text-muted); }
+</style>
+</head>
+<body data-theme="light">
+<header>
+  <strong>Example</strong>
+  <nav><a href="#ux">UX</a><a href="#design-system">Design system</a></nav>
+  <div class="themes">
+    <button data-set="light" class="on">Light</button><button data-set="dark">Dark</button><button data-set="eink">E-ink</button>
+  </div>
+</header>
+
+<section id="ux">
+  <h2>UX</h2>
+  <div class="row">
+    <div class="uxf" data-title="Write a note" data-frame="phone">
+      <div class="uxf-view" data-v="list">
+        <div class="bar">Notes <span class="btn" data-k="new">New</span></div>
+        <div class="list">
+          <div class="item new">Call the framer about the print<small>Just now</small></div>
+          <div class="item">Groceries: oats, lemons, coffee<small>Yesterday</small></div>
+          <div class="item">Ideas for the weekend<small>Mon</small></div>
+        </div>
+        <div class="toast">Note saved</div>
+      </div>
+      <div class="uxf-view" data-v="edit">
+        <div class="bar">New note</div>
+        <div class="field"><span class="note"></span><span class="caret"></span></div>
+        <div class="actions"><span class="btn ghost">Cancel</span><span class="btn" data-k="save">Save</span></div>
+      </div>
+      <script type="application/json">[
+        [0, "view", "list"],
+        [400, "cap", "Start a note from the list"], [500, "move", "[data-k=new]"], [1300, "tap"], [1500, "view", "edit"],
+        [2100, "cap", "Type it; nothing else on screen competes"], [2200, "type", ".note", "Call the framer about the print"],
+        [4000, "cap", "Save returns you to the list"], [4100, "move", "[data-k=save]"], [4900, "tap"], [5100, "view", "list"], [5200, "hide"],
+        [5300, "cls", ".item.new", "on", true], [5300, "cls", ".toast", "on", true],
+        [6000, "cap", "The new note sits on top"], [7200, "cls", ".toast", "on", false]
+      ]</script>
+    </div>
+  </div>
+</section>
+
+<section id="design-system">
+  <h2>Design system</h2>
+  <div class="row">
+    <div class="swatch"><i style="background:var(--bg)"></i><span>bg</span></div>
+    <div class="swatch"><i style="background:var(--surface)"></i><span>surface</span></div>
+    <div class="swatch"><i style="background:var(--text)"></i><span>text</span></div>
+    <div class="swatch"><i style="background:var(--accent)"></i><span>accent</span></div>
+  </div>
+</section>
+
+<script src="ux-flow.js"></script>
+<script>
+  // Theme toggle. E-ink has no motion, so flows play as instant cuts there.
+  document.querySelectorAll("[data-set]").forEach((b) => b.addEventListener("click", () => {
+    document.body.dataset.theme = b.dataset.set;
+    document.body.dataset.motion = b.dataset.set === "eink" ? "off" : "on";
+    document.querySelectorAll("[data-set]").forEach((x) => x.classList.toggle("on", x === b));
+    UXFlow.refresh();
+  }));
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+/* UX flow player styles. Map these variables to the app's own design tokens; the defaults are neutral. */
+.uxf {
+  --uxf-bg: var(--bg, #fff);
+  --uxf-text: var(--text, #111);
+  --uxf-muted: var(--text-muted, #777);
+  --uxf-surface: var(--surface, #f2f2f2);
+  --uxf-line: var(--line, #ddd);
+  --uxf-accent: var(--accent, #111);
+  --uxf-font: var(--font-ui, system-ui, sans-serif);
+  --uxf-ease: var(--ease, cubic-bezier(.2, .7, .2, 1));
+  display: grid;
+  grid-template-columns: max-content 300px;
+  gap: 40px;
+  align-items: center;
+  font-family: var(--uxf-font);
+  color: var(--uxf-text);
+}
+
+/* frames */
+.uxf-frame { position: relative; flex: none; }
+.uxf-phone { width: 390px; height: 844px; border-radius: 48px; box-shadow: 0 0 0 10px #111, 0 0 0 11px #333, 0 30px 60px -20px rgba(0, 0, 0, .45); }
+.uxf-tablet { width: 1024px; height: 720px; border-radius: 28px; box-shadow: 0 0 0 14px #111, 0 0 0 15px #333, 0 30px 60px -20px rgba(0, 0, 0, .45); }
+.uxf-desktop { width: 1280px; height: 800px; border-radius: 10px; border: 1px solid var(--uxf-line); padding-top: 30px; background: var(--uxf-surface); box-shadow: 0 30px 60px -20px rgba(0, 0, 0, .35); }
+.uxf-desktop::before { content: ""; position: absolute; top: 11px; left: 14px; width: 9px; height: 9px; border-radius: 50%; background: var(--uxf-line); box-shadow: 15px 0 var(--uxf-line), 30px 0 var(--uxf-line); }
+.uxf-none { width: var(--uxf-w, 800px); height: var(--uxf-h, 600px); }
+.uxf-screen { position: relative; width: 100%; height: 100%; overflow: hidden; border-radius: inherit; background: var(--uxf-bg); color: var(--uxf-text); }
+.uxf-desktop .uxf-screen { border-radius: 0 0 9px 9px; }
+
+/* views: sequential, not a crossfade, so no frame shows two screens at once */
+.uxf-view { position: absolute; inset: 0; display: flex; flex-direction: column; opacity: 0; transform: translateX(28px); pointer-events: none;
+  transition: opacity .16s var(--uxf-ease), transform .45s var(--uxf-ease); }
+.uxf-view.on { opacity: 1; transform: none; transition: opacity .26s var(--uxf-ease) .16s, transform .45s var(--uxf-ease); }
+.uxf-view.back { transform: translateX(-28px); }
+
+/* pointer */
+.uxf-pointer { position: absolute; left: 50%; top: 110%; z-index: 50; width: 38px; height: 38px; margin: -19px 0 0 -19px; border-radius: 50%;
+  background: rgba(127, 127, 127, .28); border: 2px solid rgba(255, 255, 255, .85); box-shadow: 0 2px 10px rgba(0, 0, 0, .25);
+  opacity: 0; pointer-events: none; transition: left .7s var(--uxf-ease), top .7s var(--uxf-ease), opacity .3s, transform .15s; }
+.uxf-pointer.on { opacity: 1; }
+.uxf-pointer.down { transform: scale(.82); }
+.uxf-pointer.tap::after { content: ""; position: absolute; inset: -2px; border-radius: 50%; border: 2px solid var(--uxf-accent); animation: uxf-ripple .5s ease-out forwards; }
+@keyframes uxf-ripple { from { transform: scale(1); opacity: .8; } to { transform: scale(2.2); opacity: 0; } }
+
+.uxf-scroll { overflow: hidden; }
+.uxf-scroll > :first-child { transition: transform .8s var(--uxf-ease); }
+
+/* motion off: instant cuts, no pointer travel */
+.uxf-cut, .uxf-cut * { transition: none !important; animation: none !important; }
+[data-motion="off"] .uxf-pointer { display: none; }
+@media (prefers-reduced-motion: reduce) { .uxf-screen *, .uxf-screen { transition: none !important; animation: none !important; } .uxf-pointer { display: none; } }
+
+/* side panel */
+.uxf-side { display: flex; flex-direction: column; gap: 12px; }
+.uxf-title { margin: 0; font-size: 28px; font-weight: 400; letter-spacing: -.01em; }
+.uxf-ctl { display: flex; align-items: center; gap: 8px; }
+.uxf-ctl button { font: 500 12px/1 var(--uxf-font); padding: 7px 12px; border-radius: 999px; border: 1px solid var(--uxf-line); background: transparent; color: var(--uxf-text); cursor: pointer; }
+.uxf-progress { flex: 1; height: 3px; border-radius: 3px; background: var(--uxf-line); overflow: hidden; }
+.uxf-progress i { display: block; height: 100%; width: 0; background: var(--uxf-accent); }
+.uxf-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.uxf-steps li { position: relative; padding: 8px 10px 8px 16px; border-radius: 10px; font-size: 13px; line-height: 1.4; color: var(--uxf-muted); cursor: pointer; }
+.uxf-steps li::before { content: ""; position: absolute; left: 4px; top: 10px; bottom: 10px; width: 2px; border-radius: 2px; }
+.uxf-steps li.done { color: var(--uxf-text); opacity: .7; }
+.uxf-steps li.on { color: var(--uxf-text); background: var(--uxf-surface); }
+.uxf-steps li.on::before { background: var(--uxf-accent); }
+.uxf-meta { font-size: 11px; color: var(--uxf-muted); }
+
+/* narrow gallery columns: stack the steps under the frame */
+.uxf.stack { grid-template-columns: max-content; }

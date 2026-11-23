@@ -45,7 +45,11 @@ Build one page with two sections:
 
 - **UX:** the app's screens and flows, animated. Each flow plays from one state to the
   next the way the real app would, so the user sees it behave rather than reading a
-  description of it.
+  description of it. Build them with the bundled player, not a new animation system:
+  copy `assets/ux-flow.js` and `assets/ux-flow.css` next to the page and write each
+  flow as its views plus a steps script. The usage and step ops are at the top of
+  `ux-flow.js`, and `assets/example.html` is a working page with both sections to
+  start from.
 - **Design system:** the product's aesthetics: color tokens, typography, components,
   icons and imagery.
 
