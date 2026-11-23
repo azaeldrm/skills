@@ -46,7 +46,7 @@ Build one page with two sections, after a short overview of the direction:
 - **UX:** the app's screens and flows, animated. Each flow plays from one state to the
   next the way the real app would, so the user sees it behave rather than reading a
   description of it. Show each flow on web and phone side by side, playing in sync (on
-  a narrow screen, one at a time with buttons to switch).
+  a narrow screen, only the phone).
 - **Design system:** the product's aesthetics: color tokens, typography, components,
   icons and imagery.
 
@@ -73,13 +73,15 @@ scoped to what they asked for, re-take the affected screenshots, and say what ch
 
 ## 4. Logo / mark
 
-Settle the logo the same way, after the direction holds.
+Settle the logo the same way, after the direction holds. Present it as a Logo section in
+the same page.
 - If the user brings a logo or sketch, build from it, and say honestly whether it beats
   any mark you proposed.
 - Offer a few variants and show them at real sizes, including the smallest. Add a
   simplified version if detail breaks down when small.
 - Compare finalists in place on real screens (sign-in, navigation, app icon), side by
-  side, then put the chosen one into the style guide.
+  side. Once the user picks one, put it into the design system and replace the old
+  mark everywhere in the mockups.
 
 ## 5. Icons and illustrations
 

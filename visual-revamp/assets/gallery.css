@@ -41,3 +41,4 @@ body.g { --g-max: 1200px; --g-pad: 32px; margin: 0; height: 100vh; height: 100dv
   .g-nav button:has(.g-short) .g-long { display: none; }
   .g-nav .g-short { display: inline; }
 }
+@media (max-width: 400px) { .g-nav { gap: 0; } .g-nav button { padding: 6px 8px; } }
