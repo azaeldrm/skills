@@ -166,6 +166,11 @@
         ol.appendChild(li);
         return li;
       });
+      const ghost = document.createElement("li");
+      ghost.className = "on uxf-ghost";
+      ghost.setAttribute("aria-hidden", "true");
+      ghost.textContent = "\u00a0";
+      ol.appendChild(ghost);
       this.bar = side.querySelector(".uxf-progress i");
       this.btn = side.querySelector("[data-play]");
       this.btn.addEventListener("click", () => { this.playing = !this.playing; this.btn.textContent = this.playing ? "Pause" : "Play"; });
