@@ -10,7 +10,7 @@ Review code changes and report bugs, regressions, risky assumptions, and missing
 ## Default behavior
 
 - Review the PR or diff represented by the current branch unless the user explicitly names a different PR, branch, or base.
-- Run 3 independent review sub-agents by default.
+- Run 3 independent review sub-agents by default, through Codex when its CLI is available (step 2).
 - Verify every accepted finding yourself against the current workspace before presenting it.
 - After presenting findings, propose a fix plan.
 - Wait for explicit user confirmation before changing code.
@@ -35,6 +35,8 @@ Review code changes and report bugs, regressions, risky assumptions, and missing
 - Ask each agent for findings only, ordered by severity, with concrete file and line references.
 - Keep the prompts slightly different when useful, for example one general pass, one backend/API-focused pass, and one frontend/client-contract pass.
 - Do not present raw agent output as the final review.
+- **Codex reviewers.** When the `codex` CLI is installed and logged in, run each reviewer as a background `codex exec -s read-only -m gpt-6.1-sol --ephemeral -o <scratch>/review-<n>.md "<prompt>"`. Use another model only when the user names one. Otherwise use Claude sub-agents and say so in the report.
+- Start each Codex prompt with: "You are one of three independent reviewers. Report findings only; do not use the review-changes skill or spawn agents."
 
 ### 3. Verify agent outputs yourself
 
