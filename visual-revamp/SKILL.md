@@ -36,17 +36,21 @@ Before building anything, tell the user:
 
 ## 2. Build the style in HTML
 
-Put everything under a gitignored `.local/design/<effort>/`. Build:
-- typography, color tokens, buttons, cards, inputs, navigation, and other core
-  components
-- a few representative full screens, with the product's priority screens first
-- every theme the product supports (for example light, dark, e-ink or high contrast)
-- the user's images as wallpapers or backgrounds where they work, keeping text
-  contrast intact over them
+Put everything under a gitignored `.local/design/<effort>/`. Every item comes in every
+theme the product supports (for example light, dark, e-ink or high contrast). Use the
+user's images as wallpapers or backgrounds where they work, keeping text contrast intact
+over them.
 
-Present the work on **one scrollable page** of screenshots, not pages to click through.
-Host it at a URL the user can open from another machine. Review your own screenshots and
-fix layout problems before showing them.
+Build one page with two sections:
+
+- **UX:** the app's screens and flows, animated. Each flow plays from one state to the
+  next the way the real app would, so the user sees it behave rather than reading a
+  description of it.
+- **Design system:** the product's aesthetics: color tokens, typography, components,
+  icons and imagery.
+
+Host the page at a URL the user can open from another machine. Check your own output
+and fix problems before showing it.
 
 ## 3. Iterate
 
@@ -73,8 +77,8 @@ direction.
   activity indicator).
 - Add motion only where it says something (playing, thinking, speaking, loading),
   respect reduced-motion and no-animation themes, and keep motion cheap on mobile.
-- Show each icon at its real size, in every theme, and in context on the mockups.
-  Expect several rounds of small corrections on individual icons.
+- Show each icon in context in the UX section, and put the full set in the Design
+  system section. Expect several rounds of small corrections on individual icons.
 
 ## 6. Hand off
 
